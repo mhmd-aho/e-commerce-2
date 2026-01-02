@@ -18,17 +18,30 @@ export function Cart(){
                         <h1 className="text-black border-b border-neutral-300 p-2 w-full">Cart</h1>
                         <div className="flex flex-col items-start justify-start w-full flex-1 overflow-y-auto">
                            {
-                            cartItems && cartItems.length > 0?
+                            cartItems === undefined?
+                            <h2 className="text-neutral-600 font-inter m-auto">Loading...</h2>:
+                            cartItems.length > 0?
                             cartItems.map(item=>{
+                                if(!item){
+                                    return null
+                                }
+                                const shoe = item.shoeWithImage
+                                if(!shoe){
+                                    return null
+                                }
                                 return(
-                                    <Link  href={`/product/${item.shoeId}`} key={item._id} className="flex justify-between hover:bg-neutral-200 p-2 w-full">
-                                        <div className="relative size-20 rounded-lg overflow-hidden">
-                                            <Image fill className="object-cover object-center" src={item.imageUrl || '/assets/img/placeholder.png'} alt={item.name} />
+                                    <Link  href={`/product/${shoe?._id}`} key={item._id} className="flex justify-between items-center hover:bg-neutral-200 py-2 px-4 w-full">
+                                        <div className="flex gap-2">
+                                            <div className="relative size-20 rounded-lg overflow-hidden">
+                                                <Image fill className="object-cover object-center" src={shoe?.imageUrl || '/assets/img/placeholder.png'} alt={shoe?.name} />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <h2 className="text-black">{shoe?.name}</h2>
+                                                <h4 className="text-neutral-600">{shoe?.price}$ ({item.quantity})</h4>
+                                                <p className="text-neutral-600">{item.size}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <h2 className="text-black">{item.name}</h2>
-                                            <h4 className="text-neutral-600">{item.price}$</h4>
-                                        </div>
+                                        <h4 className="text-black text-2xl">{shoe?.price * item.quantity}$</h4>
                                     </Link>
                                 )
                             }):

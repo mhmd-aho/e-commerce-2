@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import {Searchbar} from "./searchbar";
-import logo from '@/public/assets/icons/logo.svg';
+import logo from '@/public/assets/icons/favicon.svg';
 import { Profile } from "./user";
 import { AddShoe } from "./addShoes";
 import {Favorites} from "./favorites";

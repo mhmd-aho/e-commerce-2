@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+export const metadata: Metadata = {
+    title: 'About | Nike e-commerce',
+    description: 'About page',
+}
 export default function About() {
     return (
         <section className="bg-black min-h-screen w-full flex flex-col gap-6 sm:px-2 px-1">

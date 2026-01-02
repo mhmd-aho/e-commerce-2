@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import arrowLeft from "@/public/assets/icons/arrow.svg";
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return(
         <>

@@ -13,8 +13,7 @@ export default defineSchema({
     cart: defineTable({
         userId:v.string(),
         shoeId:v.id('shoes'),
-        name:v.string(),
-        price:v.number(),
-        picId:v.optional(v.id('_storage')),
+        quantity:v.number(),
+        size:v.number(),
     })
 })

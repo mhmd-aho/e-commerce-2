@@ -2,8 +2,12 @@ import Filters from "@/components/filters";
 import ShoesDisplay from "@/components/shoesDisplay";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
+import { Metadata } from "next";
 export const dynamic = 'force-static';
-
+export const metadata: Metadata = {
+    title: 'Shop | Nike e-commerce',
+    description: 'discover the latest collection of shoes',
+}
 export default async function Shop() {
     const shoes = await fetchQuery(api.shoes.getShoes)
     return (

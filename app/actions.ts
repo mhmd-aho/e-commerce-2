@@ -57,9 +57,7 @@ export async function addToCartAction(data: CartValues) {
 
         await fetchMutation(api.cart.addToCart, {
             shoeId: validatedData.data.shoeId as Id<'shoes'>,
-            name: validatedData.data.name,
-            price: validatedData.data.price,
-            picId: validatedData.data.picId as Id<"_storage">,
+            size: validatedData.data.size,
         }, { token });
     } catch {
         return {

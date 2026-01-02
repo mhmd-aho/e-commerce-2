@@ -6,14 +6,19 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import { Shoe } from "@/lib/constants";
 import { ShoesSkeleton } from "@/components/ShoesSkeleton";
+import { Metadata } from "next";
 export const dynamic = 'force-static';
+export const metadata: Metadata = {
+    title: 'Home | Nike e-commerce',
+    description: 'welcome to nike e-commerce clone',
+}
 export default function Home() {
   return (
         <section className="bg-black min-h-screen w-full flex flex-col gap-6 ">
       <div style={{ backgroundImage: 'url(/assets/img/background.webp)' }} className="sm:h-[calc(100vh-3rem)] sm:mt-12 h-screen mt-10 flex flex-col justify-center items-center text-white sm:gap-6 gap-2 bg-fit bg-center bg-no-repeat">
         <h1 className="text-center">Experience Nike Like <br /> Never Before</h1>
         <div className="flex gap-2">
-          <Link href="/product/air-jordan-1-mid"><Button>Buy Now</Button></Link>
+          <Link href="/product/j979def4pnvcx135prt6zw85ys7y4tta"><Button>Buy Now</Button></Link>
           <Link href="/shop"><Button>Explore</Button></Link>
         </div>
     </div>

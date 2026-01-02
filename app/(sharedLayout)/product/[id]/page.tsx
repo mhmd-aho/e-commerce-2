@@ -1,16 +1,30 @@
 import { getColor } from "@/lib/constants";
-import { ProductButtons } from "@/components/porductButtons";
+import {AddToCart} from "@/components/addToCart";
 import Image from "next/image";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+
+
+export async function generateMetadata({params}: {params: {id: Id<"shoes">}}) {
+    const {id} = await params
+    const shoe = await fetchQuery(api.shoes.getShoeById, {shoeId: id})
+    if (!shoe) {
+        return {
+            title: 'Shoe not found',
+        }
+    }
+    return {
+        title: `${shoe.name} | Nike e-commerce`,
+        description: `${shoe.description}`,
+    }
+}
 interface Props {
     params: Promise<{id: Id<"shoes">}>
 }
 export default async function Product ({ params }: Props) {
     const {id} = await params
     const shoe = await fetchQuery(api.shoes.getShoeById, {shoeId: id})
-    const sizes = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45]
     if (!shoe) {
         return (
             <section className="h-screen bg-black flex justify-center items-center">
@@ -39,20 +53,7 @@ export default async function Product ({ params }: Props) {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col lg:gap-1 gap-0.5">
-                        <p className="text-white/80">Sizes:</p>
-                        <div className="flex gap-1 flex-wrap">
-                            {sizes.map((size) => (
-                               <button 
-                                    key={size}
-                                    className={`px-5 py-1 rounded-xl transition-colors bg-white text-black hover:bg-black hover:text-white`}
-                                >
-                                 <p>{size}</p>
-                               </button> 
-                            ))}
-                        </div>
-                    </div>
-                    <ProductButtons shoeId={shoe._id} name={shoe.name} price={shoe.price} picId={shoe.picId ?? ""} />
+                    <AddToCart />
                 </div>
             </div>
         </section>
