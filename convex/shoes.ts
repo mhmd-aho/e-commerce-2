@@ -5,8 +5,8 @@ export const createShoe = mutation({
   args: { name: v.string(),description: v.string(),price: v.number(),colors: v.array(v.string()),gender: v.string(),picId: v.id('_storage')},
   handler: async (ctx, args) => {
     const user = await authComponent.safeGetAuthUser(ctx)
-    if(!user){
-      throw new ConvexError("You must be logged in to add a new shoe")
+    if(user?.name !== 'admin'){
+      throw new ConvexError("You must be admin to add a new shoe")
     }
    const newShoe = await ctx.db.insert("shoes",{
     name: args.name,
@@ -37,8 +37,8 @@ export const generateImageUploadUrl = mutation({
   args:{},
   handler: async (ctx) => {
     const user = await authComponent.safeGetAuthUser(ctx)
-    if(!user){
-      throw new ConvexError("You must be logged in to add a new shoe")
+    if(user?.name !== 'admin'){
+      throw new ConvexError("You must be admin to add a new shoe")
     }
     return await ctx.storage.generateUploadUrl()
   },

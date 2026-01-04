@@ -14,10 +14,10 @@ export const getCartItems = query({
             if(!shoe){
                 return null
             }
-            const reslovedImageUrl = shoe.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null
+            const resolvedImageUrl = shoe.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null
             const shoeWithImage = {
                 ...shoe,
-                imageUrl: reslovedImageUrl
+                imageUrl: resolvedImageUrl
             }
             return {
                 ...item,
@@ -25,7 +25,7 @@ export const getCartItems = query({
             }
         }))
 
-        return item;
+        return item.filter((i) => i !== null);
     }
 })
 export const addToCart = mutation({
@@ -52,5 +52,45 @@ export const addToCart = mutation({
             size: args.size,
    })
    return newShoeInCart
+    }
+})
+export const decreaseCart = mutation({
+    args:{
+        cartItemId: v.id('cart'),
+    },
+    handler: async (ctx, args) => {
+        const user = await authComponent.safeGetAuthUser(ctx)
+        if(!user){
+            throw new ConvexError("You must be logged in to remove a shoe from the cart")
+        }
+        const cartItem = await ctx.db.get(args.cartItemId)
+        if(!cartItem){
+            throw new ConvexError("Cart item not found")
+        }
+        if(cartItem.quantity === 1){
+            await ctx.db.delete(args.cartItemId)
+            return
+        }
+        await ctx.db.patch(args.cartItemId, {
+            quantity: cartItem.quantity - 1
+        })
+    }
+})
+export const increaseCart = mutation({
+    args:{
+        cartItemId: v.id('cart'),
+    },
+    handler: async (ctx, args) => {
+        const user = await authComponent.safeGetAuthUser(ctx)
+        if(!user){
+            throw new ConvexError("You must be logged in to remove a shoe from the cart")
+        }
+        const cartItem = await ctx.db.get(args.cartItemId)
+        if(!cartItem){
+            throw new ConvexError("Cart item not found")
+        }
+        await ctx.db.patch(args.cartItemId, {
+            quantity: cartItem.quantity + 1
+        })
     }
 })

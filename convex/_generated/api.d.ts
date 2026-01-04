@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as cart from "../cart.js";
+import type * as favorites from "../favorites.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as shoes from "../shoes.js";
@@ -23,6 +24,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   cart: typeof cart;
+  favorites: typeof favorites;
   files: typeof files;
   http: typeof http;
   shoes: typeof shoes;

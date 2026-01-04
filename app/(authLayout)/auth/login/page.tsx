@@ -5,12 +5,11 @@ import { loginSchema } from "@/app/schemas/auth";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { useState,useTransition } from "react";
+import { useTransition } from "react";
+import {toast} from "react-toastify"
 
 export default function Login() {
-    const [popUpText,setPopUpText] = useState<string>("");
     const [isPending, startTransition] = useTransition();
-    const [popUp,setPopUp] = useState<boolean>(false);
     const router = useRouter();
     const form = useForm({
         resolver: zodResolver(loginSchema),
@@ -26,19 +25,11 @@ export default function Login() {
             password: data.password,
             fetchOptions:{
                 onSuccess:()=>{
-                    setPopUpText("Login successful");
-                    setPopUp(true);
-                    setTimeout(() => {
+                    toast.success("Login successful");
                         router.push("/")
-                        setPopUp(false)
-                    }, 1000);
                 },
                 onError:(error)=>{
-                    setPopUpText(error.error.message);
-                    setPopUp(true);
-                    setTimeout(() => {
-                        setPopUp(false)
-                    }, 1000);
+                    toast.error(error.error.message);
                 }
             }
         })
@@ -76,16 +67,7 @@ export default function Login() {
                     />
                     <button disabled={isPending} type="submit" className="bg-white/80 hover:bg-white/60 transition-all duration-200 text-black h-12 rounded-lg sm:mt-4 mt-2">{isPending ? "Loading..." : "Login"}</button>
                 </form>
-            </div>
-            {
-                popUp &&
-                    <div className="fixed bottom-5 right-5 w-96 h-20 flex items-center justify-center z-50 bg-neutral-800 rounded">
-                        <div onClick={()=>setPopUp(false)} className="absolute -top-2 left-2 h-5 w-5 bg-neutral-800 rounded-full flex justify-center items-center overflow-hidden border border-black">
-                            <button  className='text-sm text-neutral-400'>x</button>
-                        </div>
-                        <h3>{popUpText}</h3>
-                    </div>
-            }   
+            </div> 
         </section>
     )
 }

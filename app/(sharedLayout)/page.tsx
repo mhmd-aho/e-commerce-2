@@ -24,7 +24,7 @@ export default function Home() {
     </div>
      <div className="h-fit flex flex-col justify-center gap-3 sm:justify-around items-baseline pb-5 sm:px-3 px-2 ">
       <h2 className="text-white">Feauters</h2>
-       <div className="grid grid-cols-2 sm:grid-cols-4 lg:gap-6 gap-4 lg:w-3/4 w-full self-center" >
+       <div className="grid grid-cols-2 sm:grid-cols-4 lg:gap-4 gap-2 lg:w-5/6   w-full self-center" >
             <Suspense fallback={
               <>
               {

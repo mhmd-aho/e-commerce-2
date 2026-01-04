@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useTransition } from "react";
 import { createShoeAction } from "@/app/actions";
 import { colors } from "@/lib/constants";
+import { toast } from "react-toastify";
 
 type FormValues = z.infer<typeof shoeSchema>;
 export default function AddShoe() {
@@ -21,9 +22,15 @@ export default function AddShoe() {
             image: undefined,
         }
     })
-    const onSubmit = (data: FormValues) => {
-        startTransition(() => {
-            createShoeAction(data)
+    const onSubmit = async (data: FormValues) => {
+        startTransition(async () => {
+            const result = await createShoeAction(data)
+            if(result?.error){
+                toast.error(result.error)
+            }else{
+                toast.success("Shoe added successfully")
+                form.reset()
+            }
         })
     }
     return (

@@ -19,17 +19,15 @@ export default async function Shop() {
                     <h1>Collection</h1>
                 </div>
                 <div className='flex-1 flex sm:gap-2 overflow-hidden'>
-                    <div className="h-full w-[20%] overflow-y-auto">
                         <Filters />
-                    </div>
                     <div className='flex-1 overflow-y-auto'>
                         {shoes.length === 0 ? (
-                            <div className="flex justify-center items-center h-full">
-                                <h3 className="text-center text-gray-400">No shoes found</h3>
-                            </div>
-                        ) : (
-                            <ShoesDisplay />
-                        )}
+                                <div className="flex justify-center items-center h-full">
+                                    <h3 className="text-center text-gray-400">No shoes found</h3>
+                                </div>
+                            ) : (
+                                <ShoesDisplay />
+                            )}
                     </div>
                 </div>
             </div>

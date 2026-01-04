@@ -4,12 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/app/schemas/auth";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
-import { useState,useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 export default function Signup() {
-    const [popUp,setPopUp] = useState(false)
     const [isPending, startTransition] = useTransition()
-    const [popUpText,setPopUpText] = useState("")
     const router = useRouter()
     const form = useForm({
         resolver: zodResolver(signupSchema),
@@ -27,19 +26,11 @@ export default function Signup() {
             name: data.name,
             fetchOptions:{
                 onSuccess:()=>{
-                    setPopUp(true)
-                    setPopUpText("Signup successful")
-                    setTimeout(() => {
-                        setPopUp(false)
-                        router.push("/")
-                    }, 1000);
+                    toast.success("Signup successful")
+                    router.push("/")
                 },
                 onError:(error)=>{
-                    setPopUp(true)
-                    setPopUpText(error.error.message)
-                    setTimeout(() => {
-                        setPopUp(false)
-                    }, 1000);
+                    toast.error(error.error.message)
                 }
             }
         })
@@ -89,13 +80,6 @@ export default function Signup() {
                     <button disabled={isPending} type="submit" className="bg-white/80 hover:bg-white/60 transition-all duration-200 text-black h-12 rounded-lg sm:mt-4 mt-2">{isPending ? "Loading..." : "Signup"}</button>
                 </form>
             </div>
-           {
-                popUp && (
-                    <div className="fixed bottom-5 right-5 w-96 h-20 flex items-center justify-center z-50 bg-white/10 rounded">
-                            <h2>{popUpText}</h2>
-                    </div>
-                )
-            }
         </section>
     );
 }

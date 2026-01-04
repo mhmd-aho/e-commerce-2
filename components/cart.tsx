@@ -1,56 +1,129 @@
 "use client"
 import Image from "next/image"
 import cart from "@/public/assets/icons/cart.svg"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { api } from "@/convex/_generated/api"
 import { useQuery } from "convex/react"
 import Link from "next/link"
-
+import { useMutation } from "convex/react"
+import Button from "./button"
+import { motion, AnimatePresence } from 'motion/react'
+const buttonVariants ={
+    whileTap:{ 
+        scale: 0.9,
+        y:1,
+        opacity: 0.5,
+        transition:{type:'spring',stiffness:300,damping:13}
+    },
+    whileHover:{ 
+        scale: 1.05,
+        y:-2 ,
+        opacity: 0.8,
+        transition:{type:'spring',stiffness:300,damping:13}
+    },
+}
+const PopupVariants = {
+    hidden:{
+        opacity:0,
+        y:-500
+    },
+    visible:{
+        opacity:1,
+        y:0
+    }
+}
 export function Cart(){
     const [open, setOpen] = useState(false)
+    const user = useQuery(api.auth.getCurrentUser)
+    const [isPending, startTransition] = useTransition()
     const cartItems = useQuery(api.cart.getCartItems)
-    return(
-        <>
-            <Image onClick={() => setOpen(!open)} src={cart} alt="Cart" className="h-full w-auto" />
-            {
-                open && (
-                    <div className="fixed top-12 right-5 w-96 h-96 rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
-                        <h1 className="text-black border-b border-neutral-300 p-2 w-full">Cart</h1>
-                        <div className="flex flex-col items-start justify-start w-full flex-1 overflow-y-auto">
-                           {
-                            cartItems === undefined?
-                            <h2 className="text-neutral-600 font-inter m-auto">Loading...</h2>:
-                            cartItems.length > 0?
-                            cartItems.map(item=>{
-                                if(!item){
-                                    return null
-                                }
-                                const shoe = item.shoeWithImage
-                                if(!shoe){
-                                    return null
-                                }
-                                return(
-                                    <Link  href={`/product/${shoe?._id}`} key={item._id} className="flex justify-between items-center hover:bg-neutral-200 py-2 px-4 w-full">
-                                        <div className="flex gap-2">
-                                            <div className="relative size-20 rounded-lg overflow-hidden">
-                                                <Image fill className="object-cover object-center" src={shoe?.imageUrl || '/assets/img/placeholder.png'} alt={shoe?.name} />
+    const increaseCart = useMutation(api.cart.increaseCart)
+    const decreaseCart = useMutation(api.cart.decreaseCart)
+    if(user){
+        return(
+            <>
+                <Image onClick={() => setOpen(!open)} src={cart} alt="Cart" className="h-full w-auto" />
+                <AnimatePresence>
+                    {
+                        open && (
+                            <motion.div variants={PopupVariants} animate='visible' exit='hidden' initial='hidden' className="fixed top-12 right-5 w-96 h-[calc(70vh)] rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
+                                <h1 className="text-black border-b border-neutral-300 p-2 w-full">Cart</h1>
+                                <div className="flex flex-col items-start justify-start w-full flex-1 overflow-y-auto">
+                                {
+                                    cartItems === undefined?(
+                                        Array.from({ length: 3 }).map((_, index) => (
+                                            <div key={index} className="flex justify-between items-center py-2 px-4 w-full">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="relative size-20 rounded-lg bg-neutral-800 animate-pulse"/>
+                                                            <div className="flex flex-col gap-0.5">
+                                                                <div className="h-2 w-24 bg-neutral-800 animate-pulse"/>
+                                                                <div className="h-2 w-20 bg-neutral-800 animate-pulse"/>
+                                                                <div className="h-2 w-16 bg-neutral-800 animate-pulse"/>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col items-center justify-between p-1 bg-neutral-800 w-9 h-24 rounded-full animate-pulse "/>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <h2 className="text-black">{shoe?.name}</h2>
-                                                <h4 className="text-neutral-600">{shoe?.price}$ ({item.quantity})</h4>
-                                                <p className="text-neutral-600">{item.size}</p>
-                                            </div>
-                                        </div>
-                                        <h4 className="text-black text-2xl">{shoe?.price * item.quantity}$</h4>
-                                    </Link>
-                                )
-                            }):
-                            <h2 className="text-neutral-600 font-inter m-auto">No items in cart</h2>
-                           }
-                        </div>
-                    </div>
-                )
-            }
+                                        ))
+                                    )
+                                    :
+                                    cartItems.length > 0?
+                                    cartItems.map(item=>{
+                                        if(!item){
+                                            return null
+                                        }
+                                        const shoe = item.shoeWithImage
+                                        if(!shoe){
+                                            return null
+                                        }
+                                        return(
+                                            <Link  href={`/product/${shoe?._id}`} key={item._id} className="flex justify-between items-center hover:bg-neutral-200 py-2 px-4 w-full">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="relative size-20 rounded-lg overflow-hidden">
+                                                                <Image fill className="object-cover object-center" src={shoe?.imageUrl || '/assets/img/placeholder.png'} alt={shoe?.name} />
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <p className="text-black font-bold font-poppins">{shoe?.name.length>15?shoe?.name.slice(0,15)+'...':shoe?.name}</p>
+                                                                <p className="text-black font-inter">Size: <span className="text-neutral-600">{item.size}</span></p>
+                                                                <p className="text-black font-orbitron font-semibold">{shoe?.price * item.quantity}$<span className="text-neutral-600 text-sm">({shoe?.price}$ x {item.quantity})</span></p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col items-center justify-between p-1 bg-neutral-300 w-9 h-24 rounded-full ">
+                                                            <motion.div variants={buttonVariants} whileTap="whileTap" whileHover="whileHover" className="flex items-center justify-center w-8 h-8 rounded-full bg-white">
+                                                                <button onClick={async (e) => {
+                                                                    e.preventDefault()
+                                                                    e.stopPropagation()
+                                                                    startTransition(() => {
+                                                                    decreaseCart({ cartItemId: item._id })
+                                                                })
+                                                            }} disabled={isPending} className={`bg-white px-3 py-1 rounded-full ${isPending && 'opacity-50'}`}>-</button>
+                                                            </motion.div>
+                                                            <p>{item.quantity}</p>
+                                                            <motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.1,opacity: 0.8 }} transition={{ type: 'spring', stiffness: 200 }} className="flex items-center justify-center w-8 h-8 rounded-full bg-white">
+                                                                <button onClick={async (e) => {
+                                                                    e.preventDefault()
+                                                                    e.stopPropagation()
+                                                                    startTransition(() => {
+                                                                        increaseCart({ cartItemId: item._id })
+                                                                    })
+                                                                }} disabled={isPending} className={`${isPending && 'opacity-50'}`}>+</button>
+                                                            </motion.div>
+                                                        </div>  
+                                            </Link>
+                                        )
+                                    }):
+                                    <h2 className="text-neutral-600 font-inter m-auto">No items in cart</h2>
+                                }
+                                </div>
+                                <div className="flex flex-col items-start justify-center gap-4 p-3 w-full border-t border-neutral-300">
+                                    <h4 className="text-black text-3xl font-extrabold">{ cartItems ? cartItems.reduce((total, item) => total + (item?.shoeWithImage?.price || 0) * (item?.quantity || 1), 0) : 0}$</h4>
+                                    <Button>Checkout</Button>
+                                </div>
+                            </motion.div>
+                            
+                        )
+                    }
+                </AnimatePresence>
         </>
     )
+}
 }

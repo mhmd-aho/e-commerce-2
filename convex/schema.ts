@@ -15,5 +15,9 @@ export default defineSchema({
         shoeId:v.id('shoes'),
         quantity:v.number(),
         size:v.number(),
+    }),
+    favorite: defineTable({
+        userId:v.string(),
+        shoeId:v.id('shoes'),
     })
 })

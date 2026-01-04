@@ -1,29 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Orbitron:wght@400..900&family=Poppins&display=swap');
 @import "tailwindcss";
-@theme{
-    --font-poppins: 'Poppins', sans-serif;
-    --font-orbitron: 'Orbitron', sans-serif;
-    --font-inter: 'Inter', sans-serif;
-    --color-black: #111111;
-    --color-accent: #e7192e;
+@theme {
+  --font-poppins: var(--font-poppins);
+  --font-orbitron: var(--font-orbitron);
+  --font-inter: var(--font-inter);
+  --color-black: #111111;
+  --color-accent: #e7192e;
 }
 @layer base {
-h1 {
+  h1 {
     @apply font-poppins sm:text-4xl text-2xl font-bold text-white;
-}
-h2{
+  }
+  h2 {
     @apply font-poppins sm:text-2xl text-lg font-semibold text-white;
-}
-h3{
+  }
+  h3 {
     @apply font-poppins sm:text-xl text-base font-medium text-white;
-}
-h4{
+  }
+  h4 {
     @apply font-orbitron sm:text-base text-sm font-bold text-white;
-} 
-p{ 
-    @apply font-inter sm:text-base text-sm ;
-}
-main,body{
+  }
+  p {
+    @apply font-inter sm:text-base text-sm;
+  }
+  main,
+  body {
     @apply bg-black min-h-screen w-full;
-}
+  }
 }

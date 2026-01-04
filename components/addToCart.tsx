@@ -2,31 +2,78 @@
 import { useParams } from "next/navigation"
 import Button from "./button"
 import { useState, useTransition } from "react"
-import { addToCartAction } from "@/app/actions"
 import { Id } from "@/convex/_generated/dataModel"
-
+import { toast } from "react-toastify";
+import { useMutation, useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 export function AddToCart() {
     const {id} = useParams()
     const [size, setSize] = useState<number>()
-    const [popUp,setPopUp] = useState(false)
     const [error,setError] = useState(false)
-    const [isPending, startTransition] = useTransition()
+    const [isPendingCart, startTransitionCart] = useTransition()
+    const [isPendingFav, startTransitionFav] = useTransition()
     const sizes = [36, 37, 38, 39, 40, 41, 42, 43, 44, 45]
+    const addToCart = useMutation(api.cart.addToCart)
+    const addToFavorite = useMutation(api.favorites.addToFavorite)
+    const user = useQuery(api.auth.getCurrentUser)
+    const favoriteItems = useQuery(api.favorites.getFavoriteItems)
+    const itemExistsInFavorite =()=>{
+        if(!favoriteItems){
+            return false
+        }
+        return favoriteItems.some((item)=>item.shoeId === id)
+    }
+    const cartItems = useQuery(api.cart.getCartItems)
+    const itemExistsInCart =()=>{
+        if(!cartItems){
+            return false
+        }
+        return cartItems.some((item)=>item.shoeId === id && item.size === size)
+    }
     const handleAddToCart = async () => {
+        if(!user){
+            toast.error("Please login to add to cart")
+            return null
+        }
         if(!size){
             setError(true)
             return null
         }
-        startTransition(async () => {
-            await addToCartAction({
-                shoeId: id as Id<'shoes'>,
-                size: size,
-                quantity: 1,
-            })
-        setError(false);
-        setSize(undefined)
-        setPopUp(true)
-    })
+        startTransitionCart(async () => {
+            try {
+                await addToCart({
+                    shoeId: id as Id<'shoes'>,
+                    size: size,
+                })
+                toast.success("Product added to cart")
+                setError(false);
+                setSize(undefined)
+            } catch (error: unknown) {
+                const errorMessage = (error as { data?: { message?: string }, message?: string })?.data?.message || (error as Error).message || "Failed to add to cart";
+                toast.error(errorMessage)
+            }
+        })
+    }
+    const handleAddToFavorite = async () => {
+        if(!user){
+            toast.error("Please login to add to favorite")
+            return null
+        }
+        startTransitionFav(async () => {
+            try {
+                const result = await addToFavorite({
+                    shoeId: id as Id<'shoes'>,
+                })
+                if(result.status === 'removed'){
+                    toast.success("Product removed from favorite")
+                }else{
+                    toast.success("Product added to favorite")
+                }
+            } catch (error: unknown) {
+                const errorMessage = (error as { data?: { message?: string }, message?: string })?.data?.message || (error as Error).message || "Failed to add to favorite";
+                toast.error(errorMessage)
+            }
+        })
     }
     return (
        <>
@@ -46,18 +93,9 @@ export function AddToCart() {
                         {error && <p className="text-red-500">Please select a size</p>}
                     </div>
                     <div className="flex justify-start items-center lg:gap-4 gap-2">
-                                    <Button onClick={handleAddToCart} disabled={isPending}>{isPending ? "Loading..." : "Buy Now"}</Button>
-                                    <Button>Add to favorite</Button>
+                                    <Button onClick={handleAddToCart} disabled={isPendingCart}>{isPendingCart ? "Loading..." : `${itemExistsInCart() ? "In Cart" : "Add to Cart"}`}</Button>
+                                    <Button onClick={handleAddToFavorite} disabled={isPendingFav}>{isPendingFav ? "Loading..." : `${itemExistsInFavorite() ? "In Favorite" : "Add to Favorite"}`}</Button>
                     </div>
-                    {
-                        popUp &&
-                            <div className="fixed bottom-5 right-5 w-96 h-20 flex items-center justify-center z-50 bg-neutral-800 rounded">
-                                <div onClick={()=>setPopUp(false)} className="absolute -top-2 left-2 h-5 w-5 bg-neutral-800 rounded-full flex justify-center items-center overflow-hidden border border-black">
-                                    <button  className='text-sm text-neutral-400'>x</button>
-                                </div>
-                                <h3>Product added to cart</h3>
-                            </div>
-            }  
        </>
     )
 }
