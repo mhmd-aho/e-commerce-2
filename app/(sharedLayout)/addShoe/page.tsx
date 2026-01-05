@@ -7,6 +7,9 @@ import { useTransition } from "react";
 import { createShoeAction } from "@/app/actions";
 import { colors } from "@/lib/constants";
 import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 type FormValues = z.infer<typeof shoeSchema>;
 export default function AddShoe() {
@@ -33,8 +36,11 @@ export default function AddShoe() {
             }
         })
     }
-    return (
-        <section className="h-[calc(100vh-2.5rem)] sm:h-[calc(100vh-3rem)] pt-12 flex justify-center items-center  bg-black overflow-hidden">
+    const user = useQuery(api.auth.getCurrentUser)
+    
+    if(user?.name !== 'admin') return redirect('/auth/login')
+
+    return (<section className="h-[calc(100vh-2.5rem)] sm:h-[calc(100vh-3rem)] pt-12 flex justify-center items-center  bg-black overflow-hidden">
             <div className="bg-neutral-900 border-2 border-neutral-950/50 p-4 rounded-lg shadow-xl w-2xl h-fit flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <h1>Add Shoe</h1>

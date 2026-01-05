@@ -3,7 +3,9 @@ import ShoesDisplay from "@/components/shoesDisplay";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import { Metadata } from "next";
-export const dynamic = 'force-static';
+import { ContextProvider } from "@/app/context/context";
+import {FilterButton} from "@/components/filterButton";
+export const dynamic = 'force-static'
 export const metadata: Metadata = {
     title: 'Shop | Nike e-commerce',
     description: 'discover the latest collection of shoes',
@@ -11,12 +13,14 @@ export const metadata: Metadata = {
 export default async function Shop() {
     const shoes = await fetchQuery(api.shoes.getShoes)
     return (
-        <section 
-            className="h-screen bg-black overflow-hidden"
-        >
-            <div className="h-full flex flex-col pt-12 lg:px-4 px-3">
+        <ContextProvider>
+            <section 
+                className="h-screen bg-black overflow-hidden"
+            >
+                <div className="h-full flex flex-col pt-12 lg:px-4 px-3">
                 <div className="shrink-0 flex justify-between items-center pb-4">
                     <h1>Collection</h1>
+                    <FilterButton />
                 </div>
                 <div className='flex-1 flex sm:gap-2 overflow-hidden'>
                         <Filters />
@@ -32,5 +36,6 @@ export default async function Shop() {
                 </div>
             </div>
         </section>
+        </ContextProvider>
     )
 }

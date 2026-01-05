@@ -1,25 +1,26 @@
 "use client"
 import Image from "next/image"
 import cart from "@/public/assets/icons/cart.svg"
-import { useState, useTransition } from "react"
+import {useTransition } from "react"
 import { api } from "@/convex/_generated/api"
 import { useQuery } from "convex/react"
 import Link from "next/link"
 import { useMutation } from "convex/react"
-import Button from "./button"
 import { motion, AnimatePresence } from 'motion/react'
+import { useContexts } from "@/app/context/useContext"
+
 const buttonVariants ={
     whileTap:{ 
         scale: 0.9,
         y:1,
         opacity: 0.5,
-        transition:{type:'spring',stiffness:300,damping:13}
+        transition:{type:'spring' as const,stiffness:300,damping:13}
     },
     whileHover:{ 
         scale: 1.05,
         y:-2 ,
         opacity: 0.8,
-        transition:{type:'spring',stiffness:300,damping:13}
+        transition:{type:'spring' as const,stiffness:300,damping:13}
     },
 }
 const PopupVariants = {
@@ -33,7 +34,7 @@ const PopupVariants = {
     }
 }
 export function Cart(){
-    const [open, setOpen] = useState(false)
+    const {cartOpen,setCartOpen,setFavOpen,setUserOpen} = useContexts()
     const user = useQuery(api.auth.getCurrentUser)
     const [isPending, startTransition] = useTransition()
     const cartItems = useQuery(api.cart.getCartItems)
@@ -42,10 +43,16 @@ export function Cart(){
     if(user){
         return(
             <>
-                <Image onClick={() => setOpen(!open)} src={cart} alt="Cart" className="h-full w-auto" />
+                <Image onClick={() =>{ 
+                    setCartOpen(!cartOpen)
+                    if(!cartOpen){
+                        setFavOpen(false)
+                        setUserOpen(false)
+                    }
+                    }} src={cart} alt="Cart" className="h-full w-auto" />
                 <AnimatePresence>
                     {
-                        open && (
+                        cartOpen && (
                             <motion.div variants={PopupVariants} animate='visible' exit='hidden' initial='hidden' className="fixed top-12 right-5 w-96 h-[calc(70vh)] rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
                                 <h1 className="text-black border-b border-neutral-300 p-2 w-full">Cart</h1>
                                 <div className="flex flex-col items-start justify-start w-full flex-1 overflow-y-auto">
@@ -54,14 +61,14 @@ export function Cart(){
                                         Array.from({ length: 3 }).map((_, index) => (
                                             <div key={index} className="flex justify-between items-center py-2 px-4 w-full">
                                                         <div className="flex items-center gap-2">
-                                                            <div className="relative size-20 rounded-lg bg-neutral-800 animate-pulse"/>
+                                                            <div className="relative size-20 rounded-lg bg-neutral-300 animate-pulse"/>
                                                             <div className="flex flex-col gap-0.5">
-                                                                <div className="h-2 w-24 bg-neutral-800 animate-pulse"/>
-                                                                <div className="h-2 w-20 bg-neutral-800 animate-pulse"/>
-                                                                <div className="h-2 w-16 bg-neutral-800 animate-pulse"/>
+                                                                <div className="h-2 w-24 bg-neutral-300 animate-pulse"/>
+                                                                <div className="h-2 w-20 bg-neutral-300 animate-pulse"/>
+                                                                <div className="h-2 w-16 bg-neutral-300 animate-pulse"/>
                                                             </div>
                                                         </div>
-                                                        <div className="flex flex-col items-center justify-between p-1 bg-neutral-800 w-9 h-24 rounded-full animate-pulse "/>
+                                                        <div className="flex flex-col items-center justify-between p-1 bg-neutral-300 w-9 h-24 rounded-full animate-pulse "/>
                                             </div>
                                         ))
                                     )
@@ -116,7 +123,7 @@ export function Cart(){
                                 </div>
                                 <div className="flex flex-col items-start justify-center gap-4 p-3 w-full border-t border-neutral-300">
                                     <h4 className="text-black text-3xl font-extrabold">{ cartItems ? cartItems.reduce((total, item) => total + (item?.shoeWithImage?.price || 0) * (item?.quantity || 1), 0) : 0}$</h4>
-                                    <Button>Checkout</Button>
+                                    <motion.button variants={buttonVariants} whileTap="whileTap" whileHover="whileHover" className='font-inter font-medium w-full shadow-lg bg-accent text-white py-2 px-4 rounded-lg'>Checkout</motion.button>
                                 </div>
                             </motion.div>
                             

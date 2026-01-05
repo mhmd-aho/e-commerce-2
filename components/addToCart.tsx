@@ -1,11 +1,25 @@
 "use client"
 import { useParams } from "next/navigation"
-import Button from "./button"
 import { useState, useTransition } from "react"
 import { Id } from "@/convex/_generated/dataModel"
 import { toast } from "react-toastify";
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
+import { motion } from 'motion/react'
+const buttonVariants ={
+    whileTap:{ 
+        scale: 0.9,
+        y:1,
+        opacity: 0.5,
+        transition:{type:'spring' as const,stiffness:300,damping:13}
+    },
+    whileHover:{ 
+        scale: 1.05,
+        y:-2 ,
+        opacity: 0.8,
+        transition:{type:'spring' as const,stiffness:300,damping:13}
+    },
+}
 export function AddToCart() {
     const {id} = useParams()
     const [size, setSize] = useState<number>()
@@ -77,25 +91,25 @@ export function AddToCart() {
     }
     return (
        <>
-       <div className="flex flex-col lg:gap-1 gap-0.5">
-                        <p className="text-white/80">Sizes:</p>
-                        <div className="flex gap-1 flex-wrap">
-                            {sizes.map((s) => (
-                               <button 
-                                    key={s}
-                                    className={`px-5 py-1 rounded-xl transition-colors  hover:bg-black hover:text-white ${s === size ? 'bg-accent text-white' : 'bg-white text-black'}`}
-                                    onClick={() => setSize(s)}
-                                >
-                                 <p>{s}</p>
-                               </button> 
-                            ))}
-                        </div>
-                        {error && <p className="text-red-500">Please select a size</p>}
-                    </div>
-                    <div className="flex justify-start items-center lg:gap-4 gap-2">
-                                    <Button onClick={handleAddToCart} disabled={isPendingCart}>{isPendingCart ? "Loading..." : `${itemExistsInCart() ? "In Cart" : "Add to Cart"}`}</Button>
-                                    <Button onClick={handleAddToFavorite} disabled={isPendingFav}>{isPendingFav ? "Loading..." : `${itemExistsInFavorite() ? "In Favorite" : "Add to Favorite"}`}</Button>
-                    </div>
+            <div className="flex flex-col lg:gap-1 gap-0.5">
+                <p className="text-white/80">Sizes:</p>
+                <div className="flex gap-1 flex-wrap">
+                    {sizes.map((s) => (
+                    <button 
+                        key={s}
+                        className={`px-5 py-1 rounded-xl transition-colors  hover:bg-black hover:text-white ${s === size ? 'bg-accent text-white' : 'bg-white text-black'}`}
+                        onClick={() => setSize(s)}
+                    >
+                    <p>{s}</p>
+                    </button> 
+                    ))}
+                </div>
+                {error && <p className="text-red-500">Please select a size</p>}
+            </div>
+            <div className="flex justify-start items-center lg:gap-4 gap-2">
+                <motion.button variants={buttonVariants} whileTap="whileTap" whileHover="whileHover" className='font-inter font-medium w-full shadow-lg bg-accent text-white py-2 px-4 rounded-lg'  onClick={handleAddToCart} disabled={isPendingCart}>{isPendingCart ? "Loading..." : `${itemExistsInCart() ? "In Cart" : "Add to Cart"}`}</motion.button>
+                <motion.button variants={buttonVariants} whileTap="whileTap" whileHover="whileHover" className='font-inter font-medium w-full shadow-lg bg-accent text-white py-2 px-4 rounded-lg'  onClick={handleAddToFavorite} disabled={isPendingFav}>{isPendingFav ? "Loading..." : `${itemExistsInFavorite() ? "In Favorite" : "Add to Favorite"}`}</motion.button>
+            </div>
        </>
     )
 }
