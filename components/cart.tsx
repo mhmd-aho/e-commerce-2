@@ -8,33 +8,11 @@ import Link from "next/link"
 import { useMutation } from "convex/react"
 import { motion, AnimatePresence } from 'motion/react'
 import { useContexts } from "@/app/context/useContext"
+import { PopupVariants,buttonVariants } from "@/lib/constants"
 
-const buttonVariants ={
-    whileTap:{ 
-        scale: 0.9,
-        y:1,
-        opacity: 0.5,
-        transition:{type:'spring' as const,stiffness:300,damping:13}
-    },
-    whileHover:{ 
-        scale: 1.05,
-        y:-2 ,
-        opacity: 0.8,
-        transition:{type:'spring' as const,stiffness:300,damping:13}
-    },
-}
-const PopupVariants = {
-    hidden:{
-        opacity:0,
-        y:-500
-    },
-    visible:{
-        opacity:1,
-        y:0
-    }
-}
+
 export function Cart(){
-    const {cartOpen,setCartOpen,setFavOpen,setUserOpen} = useContexts()
+    const {cartOpen,setCartOpen,setFavOpen,setUserOpen,setShoe,setNavOpen,setSearchOpen} = useContexts()
     const user = useQuery(api.auth.getCurrentUser)
     const [isPending, startTransition] = useTransition()
     const cartItems = useQuery(api.cart.getCartItems)
@@ -43,17 +21,22 @@ export function Cart(){
     if(user){
         return(
             <>
-                <Image onClick={() =>{ 
+            <button onClick={()=>{ 
                     setCartOpen(!cartOpen)
                     if(!cartOpen){
                         setFavOpen(false)
                         setUserOpen(false)
+                        setShoe("")
+                        setNavOpen(false)
+                        setSearchOpen(false)
                     }
-                    }} src={cart} alt="Cart" className="h-full w-auto" />
+                    }} className="h-full">
+                <Image width={20} height={20} src={cart} alt="Cart" />
+            </button>
                 <AnimatePresence>
                     {
                         cartOpen && (
-                            <motion.div variants={PopupVariants} animate='visible' exit='hidden' initial='hidden' className="fixed top-12 right-5 w-96 h-[calc(70vh)] rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
+                            <motion.div variants={PopupVariants} animate='visible' exit='hidden' initial='hidden' className="fixed lg:top-12 top-10 lg:right-5 right-0 lg:w-96 lg:h-[calc(70vh)] w-full h-[calc(100vh-2rem)] lg:rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
                                 <h1 className="text-black border-b border-neutral-300 p-2 w-full">Cart</h1>
                                 <div className="flex flex-col items-start justify-start w-full flex-1 overflow-y-auto">
                                 {

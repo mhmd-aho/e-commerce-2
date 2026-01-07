@@ -7,18 +7,9 @@ import { AnimatePresence, motion } from "motion/react";
 import trash from "@/public/assets/icons/trash.svg"
 import Link from "next/link";
 import { useContexts } from "@/app/context/useContext";
-const PopupVariants = {
-    hidden:{
-        opacity:0,
-        y:-500
-    },
-    visible:{
-        opacity:1,
-        y:0
-    }
-}
+import { PopupVariants } from "@/lib/constants";
 export function Favorites(){
-    const {favOpen,setFavOpen,setCartOpen,setUserOpen} = useContexts()
+    const {favOpen,setFavOpen,setCartOpen,setUserOpen,setShoe,setNavOpen,setSearchOpen} = useContexts()
     const user = useQuery(api.auth.getCurrentUser)
     const favoriteItems = useQuery(api.favorites.getFavoriteItems)
     const removeFromFavorite = useMutation(api.favorites.removeFromFavorite).withOptimisticUpdate((localStore, args) => {
@@ -30,18 +21,23 @@ export function Favorites(){
     if(user){
         return(
             <>
-                <Image onClick={() =>{ 
+            <button  onClick={() =>{ 
                     setFavOpen(!favOpen)
                     if(!favOpen){
                         setCartOpen(false)
                         setUserOpen(false)
+                        setShoe("")
+                        setNavOpen(false)
+                        setSearchOpen(false)
                     }
 
-                }} src={favorites} alt="Favorites" className="h-full w-auto" />
+                }} className="h-full">
+                <Image src={favorites} width={20} height={20} alt="Favorites"  />
+            </button>
                 <AnimatePresence>
                 {
                     favOpen && (
-                        <motion.div variants={PopupVariants} animate='visible' exit='hidden' initial='hidden' className="fixed top-12 right-5 w-96 h-96 rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
+                        <motion.div variants={PopupVariants} animate='visible' exit='hidden' initial='hidden' className="fixed lg:top-12 top-10 lg:right-5 right-0 lg:w-96 lg:h-[calc(70vh)] w-full h-[calc(100vh-2rem)] lg:rounded-lg shadow-lg bg-white flex flex-col items-start justify-start z-50">
                             <h1 className="text-black border-b border-neutral-300 p-2 w-full">Favorites</h1>
                             <div className="flex flex-col items-start justify-start w-full flex-1 overflow-y-auto">
                                  {

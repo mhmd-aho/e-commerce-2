@@ -9,6 +9,8 @@ export default defineSchema({
         gender: v.string(),
         picId:  v.optional(v.id('_storage')),
         authorId:v.optional(v.string()),
+    }).searchIndex('search_name',{
+        searchField: 'name',
     }),
     cart: defineTable({
         userId:v.string(),

@@ -3,10 +3,9 @@ import z from "zod";
 import { shoeSchema } from "./schemas/shoe";
 import { fetchMutation } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
-
 import { redirect } from "next/navigation";
 import { getToken } from "@/lib/auth-server";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 type FormValues = z.infer<typeof shoeSchema>;
 export async function createShoeAction(data: FormValues) {
     try{
@@ -32,7 +31,7 @@ export async function createShoeAction(data: FormValues) {
               gender: validatedData.data.gender,
               picId: storageId,
             }, {token});
-            revalidatePath('/shop')
+            updateTag('shoes')
             redirect('/shop')
         } catch{
             return{

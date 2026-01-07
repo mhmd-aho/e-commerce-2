@@ -122,16 +122,16 @@ export default function AddShoe() {
 
                                         <div className={`flex gap-1 flex-wrap w-full h-32 overflow-y-scroll bg-neutral-900 border border-neutral-600 rounded-lg p-2`}>
                                             {colors.map((color) => {
-                                            const isChecked = selected.includes(color.name);
+                                            const isChecked = selected.includes(color.key);
                                             return (
                                                 <label
-                                                key={color.name}
+                                                key={color.key}
                                                 className="flex items-center gap-2 border border-neutral-700 px-2 py-1 rounded"
                                                 >
                                                 <input
                                                     type="checkbox"
                                                     checked={isChecked}
-                                                    onChange={(e) => toggle(color.name, e.target.checked)}
+                                                    onChange={(e) => toggle(color.key, e.target.checked)}
                                                 />
                                                 <span style={{ color: color.css }}>{color.name}</span>
                                                 </label>

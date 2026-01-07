@@ -1,6 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v,ConvexError } from "convex/values";
 import { authComponent } from "./auth";
+import { Doc } from "./_generated/dataModel";
 export const createShoe = mutation({
   args: { name: v.string(),description: v.string(),price: v.number(),colors: v.array(v.string()),gender: v.string(),picId: v.id('_storage')},
   handler: async (ctx, args) => {
@@ -21,16 +22,15 @@ export const createShoe = mutation({
   },
 });
 export const getShoes = query({
-  args:{},
   handler: async (ctx) => {
     const shoes = await ctx.db.query("shoes").order('desc').collect()
     return await Promise.all(shoes.map(async (shoe) => {
-      const reslovedImageUrl = shoe.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null
-      return {
-        ...shoe,
-        imageUrl: reslovedImageUrl
-      }
-    })) 
+          const reslovedImageUrl = shoe.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null
+          return {
+            ...shoe,
+          imageUrl: reslovedImageUrl
+        }
+      }))
   },
 })
 export const generateImageUploadUrl = mutation({
@@ -57,5 +57,31 @@ export const getShoeById = query({
       ...shoe,
       imageUrl: resolvedImageUrl
     }
+  }
+})
+interface searchShoesResult {
+  _id: string;
+  name: string;
+  price: number;
+  imageUrl: string | null;
+}
+export const searchShoes = query({
+  args: { query: v.string() },
+  handler: async (ctx, args) => {
+    const result: Array<searchShoesResult> = []
+    const pushDocs = async (docs: Array<Doc<'shoes'>>) => {
+      for(const doc of docs){
+        const resolvedImageUrl = doc?.picId !== undefined ? await ctx.storage.getUrl(doc.picId) : null;
+        result.push({
+          _id: doc._id,
+          name: doc.name,
+          price: doc.price,
+          imageUrl : resolvedImageUrl
+        })
+      }
+    }
+    const titleMatches = await ctx.db.query('shoes').withSearchIndex('search_name',(q)=>q.search('name',args.query)).collect()
+    await pushDocs(titleMatches)
+    return result
   }
 })

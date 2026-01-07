@@ -2,11 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import {Searchbar} from "./searchbar";
 import logo from '@/public/assets/icons/favicon.svg';
+import {Navbar} from "./navbar";
 import { Profile } from "./user";
-import { AddShoe } from "./addShoes";
 import {Favorites} from "./favorites";
 import { Cart } from "./cart";
 import { ContextProvider } from "@/app/context/context";
+
 export function Header() {
     return (
         <ContextProvider>
@@ -14,13 +15,7 @@ export function Header() {
                 <Link href="/" className="w-1/5 h-full py-1">
                     <Image  src={logo} className="h-full w-auto" alt="Nike Logo" />
                 </Link>
-                <nav aria-label="main navigation" className="flex space-x-6">
-                    <Link href="/" className="px-4 py-1 rounded-full font-inter text-white transition-all duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black">Home</Link>
-                    <Link href="/shop" className="px-4 py-1 rounded-full font-inter text-white transition-all duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black">Shop</Link>
-                    <Link href="/about" className="px-4 py-1 rounded-full font-inter text-white transition-all duration-200 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black">About</Link>
-                    <AddShoe/>
-                </nav>
-
+               <Navbar/>
                 <div className="flex items-center sm:gap-4 gap-2 h-full">
                     <Searchbar/>
                     <div className="flex items-center gap-2 h-full py-1">
