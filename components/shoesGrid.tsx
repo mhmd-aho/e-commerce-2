@@ -22,7 +22,14 @@ export function ShoesGrid({shoes}: {shoes: Shoe[]}) {
                 })
             }
             if(filter.type === 'gender'){
-                displayedShoes = displayedShoes.filter((shoe) => shoe.gender === filter.value)
+                if(filter.value === 'men'){
+                    displayedShoes = displayedShoes.filter((shoe) => shoe.gender === 'men' || shoe.gender === 'both')
+                }
+                if(filter.value === 'women'){
+                    displayedShoes = displayedShoes.filter((shoe) => shoe.gender === 'women' || shoe.gender === 'both')
+                }else{
+                    displayedShoes = displayedShoes.filter((shoe) => shoe.gender === filter.value)
+                }
             }
             if(filter.type === 'color'){
                 displayedShoes = displayedShoes.filter((shoe) => shoe.colors.includes(filter.value as string))

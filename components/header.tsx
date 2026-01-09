@@ -18,7 +18,7 @@ export function Header() {
                <Navbar/>
                 <div className="flex items-center sm:gap-4 gap-2 h-full">
                     <Searchbar/>
-                    <div className="flex items-center gap-2 h-full py-1">
+                    <div className="flex items-center gap-2 h-full">
                         <Favorites/>
                         <Cart/>
                         <Profile/>

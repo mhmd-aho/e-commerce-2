@@ -30,8 +30,8 @@ export function Cart(){
                         setNavOpen(false)
                         setSearchOpen(false)
                     }
-                    }} className="h-full">
-                <Image width={20} height={20} src={cart} alt="Cart" />
+                    }} className="relative sm:size-6 size-5">
+                <Image fill src={cart} alt="Cart" />
             </button>
                 <AnimatePresence>
                     {
@@ -69,7 +69,7 @@ export function Cart(){
                                             <Link  href={`/product/${shoe?._id}`} key={item._id} className="flex justify-between items-center hover:bg-neutral-200 py-2 px-4 w-full">
                                                         <div className="flex items-center gap-2">
                                                             <div className="relative size-20 rounded-lg overflow-hidden">
-                                                                <Image fill className="object-cover object-center" src={shoe?.imageUrl || '/assets/img/placeholder.png'} alt={shoe?.name} />
+                                                                <Image fill className="object-cover object-center" src={shoe?.imageUrl || '/assets/img/placeholder.png'} alt={shoe?.name} unoptimized />
                                                             </div>
                                                             <div className="flex flex-col">
                                                                 <p className="text-black font-bold font-poppins">{shoe?.name.length>15?shoe?.name.slice(0,15)+'...':shoe?.name}</p>

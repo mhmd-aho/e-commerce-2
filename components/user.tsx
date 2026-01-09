@@ -36,7 +36,7 @@ export function Profile() {
                     setNavOpen(false)
                     setSearchOpen(false)
                 }
-            }} className="relative h-full w-7 mr-5 lg:mr-0">
+            }} className="relative sm:size-8 size-6 mr-5 lg:mr-0">
                 <Image fill src={profile} alt="Profile" />
             </button>
             {userOpen && (

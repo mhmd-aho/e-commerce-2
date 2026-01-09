@@ -1,14 +1,5 @@
-export interface Shoe {
-  name: string
-  description: string
-  colors: string[]
-  price: number
-  gender: string
-  imageUrl?: string
-  _id: string
-  authorId?: string
-}
-
+import {Doc} from "@/convex/_generated/dataModel";
+export type Shoe = Doc<'shoes'> & { imageUrl: string | null | undefined }
 export interface CartItem extends Shoe {
   quantity: number
   size: number

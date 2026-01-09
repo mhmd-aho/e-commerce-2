@@ -14,7 +14,7 @@ export const getCartItems = query({
             if(!shoe){
                 return null
             }
-            const resolvedImageUrl = shoe.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null
+            const resolvedImageUrl = shoe.picId ? await ctx.storage.getUrl(shoe.picId) : null
             const shoeWithImage = {
                 ...shoe,
                 imageUrl: resolvedImageUrl

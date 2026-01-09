@@ -40,19 +40,19 @@ export default function AddShoe() {
     
     if(user?.name !== 'admin') return redirect('/auth/login')
 
-    return (<section className="h-[calc(100vh-2.5rem)] sm:h-[calc(100vh-3rem)] pt-12 flex justify-center items-center  bg-black overflow-hidden">
-            <div className="bg-neutral-900 border-2 border-neutral-950/50 p-4 rounded-lg shadow-xl w-2xl h-fit flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
-                    <h1>Add Shoe</h1>
-                    <h3 className="text-neutral-400">Add a new shoe to the store</h3>
+    return (<section className="text-white flex items-center justify-center lg:h-screen overflow-x-hidden">
+            <div className="bg-neutral-900 border-2 border-neutral-950/50 p-8 mx-2 max-sm:mt-10 rounded-lg shadow-xl w-2xl h-fit flex flex-col sm:gap-4 gap-2">
+                <div className="flex flex-col sm:gap-1">
+                    <h1 className="text-2xl font-bold">Add Shoe</h1>
+                    <h3 className="text-neutral-400">Add a new shoe</h3>  
                 </div>
-                <form className="flex flex-col gap-2" onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="flex gap-2">
+                <form className="flex flex-col sm:gap-3 gap-2" onSubmit={form.handleSubmit(onSubmit)}>
+                    <div className="flex lg:flex-row flex-col gap-2">
                         <Controller
                         control={form.control}
                         name="name" 
                         render={({field, fieldState}) => (
-                        <div className="flex flex-col gap-1 w-1/2">
+                        <div className="flex flex-col gap-1 lg:w-1/2 w-full">
                             <label className="text-white" htmlFor="name">Name</label>
                             <input placeholder="Nike Air Max" className="bg-neutral-900 border border-neutral-600 p-2 rounded-lg h-12 text-white" type="text"  id="name" {...field} />
                             {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
@@ -63,7 +63,7 @@ export default function AddShoe() {
                         control={form.control}
                         name="price" 
                         render={({field, fieldState}) => (
-                        <div className="flex flex-col gap-1 w-1/2">
+                        <div className="flex flex-col gap-1 lg:w-1/2 w-full">
                             <label className="text-white" htmlFor="price">Price</label>
                             <input placeholder="100" className="bg-neutral-900 border border-neutral-600 p-2 rounded-lg h-12 text-white" type="number"  id="price" onChange={(e) => field.onChange(Number(e.target.value))} value={field.value || ""} />
                             {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
@@ -71,7 +71,7 @@ export default function AddShoe() {
                         )}
                         />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex lg:flex-row flex-col gap-2">
                         <Controller
                         control={form.control}
                         name="image"
@@ -87,7 +87,7 @@ export default function AddShoe() {
                         control={form.control}
                         name="gender" 
                         render={({field, fieldState}) => (
-                        <div className="flex flex-col gap-1 w-1/2">
+                        <div className="flex flex-col gap-1 lg:w-1/2 w-full">
                             <label className="text-white" htmlFor="gender">Gender</label>
                             <select className="bg-neutral-900 border border-neutral-600 p-2 rounded-lg h-12 text-white" id="gender" {...field}>
                                 <option value="men">men</option>
@@ -99,8 +99,8 @@ export default function AddShoe() {
                         )}
                         />
                     </div>
-                    <div className="flex gap-2">
-                         <Controller
+                    <div className="flex lg:flex-row flex-col gap-2">
+                        <Controller
                                 control={form.control}
                                 name="colors"
                                 render={({ field, fieldState }) => {
@@ -113,13 +113,13 @@ export default function AddShoe() {
                                         field.onChange(selected.filter((v) => v !== value));
                                     }
                                     };
-
+                
                                     return (
-                                    <div className="flex flex-col gap-1 w-1/2">
+                                    <div className="flex flex-col gap-1 lg:w-1/2 w-full">
                                         <label className="text-white flex items-center justify-between pr-2" htmlFor="colors">
                                         Colors
                                         </label>
-
+                
                                         <div className={`flex gap-1 flex-wrap w-full h-32 overflow-y-scroll bg-neutral-900 border border-neutral-600 rounded-lg p-2`}>
                                             {colors.map((color) => {
                                             const isChecked = selected.includes(color.key);
@@ -149,7 +149,7 @@ export default function AddShoe() {
                                 control={form.control}
                                 name="description"
                                 render={({field, fieldState}) => (
-                                <div className="flex flex-col gap-1 w-1/2">
+                                <div className="flex flex-col gap-1 lg:w-1/2 w-full">
                                     <label className="text-white" htmlFor="description">Description</label>
                                     <textarea className="bg-neutral-900 border resize-none h-32 border-neutral-600 p-2 rounded-lg text-white" id="description" {...field} />
                                     {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
@@ -159,7 +159,7 @@ export default function AddShoe() {
                     </div>
                     <input disabled={isPending} type="submit" value={isPending ? "Adding..." : "Add Shoe"} className="bg-white/80 hover:bg-white/60 transition-all duration-200 text-black mt-3 h-12 rounded-lg" />
                 </form>
-            </div>
+            </div> 
         </section>
     )
 }

@@ -14,27 +14,48 @@ export default function Login() {
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            email: "",
+            usernameOrEmail: "",
             password: "",
         }
     })
-    const onSubmit = (data: z.infer<typeof loginSchema>) => {
-        startTransition(async () => {
-        await authClient.signIn.email({
-            email: data.email,
-            password: data.password,
-            fetchOptions:{
-                onSuccess:()=>{
-                    toast.success("Login successful");
-                        router.push("/")
-                },
-                onError:(error)=>{
-                    toast.error(error.error.message);
-                }
-            }
-        })
-    })
+const onSubmit = (data: z.infer<typeof loginSchema>) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isEmail = emailRegex.test(data.usernameOrEmail.trim());
+
+  startTransition(async () => {
+    if (isEmail) {
+      await authClient.signIn.email({
+        email: data.usernameOrEmail.trim(),
+        password: data.password,
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Login successful");
+            router.push("/");
+          },
+          onError: (error) => {
+            toast.error(error.error.message);
+          },
+        },
+      });
+    } else {
+      await authClient.signIn.username({
+        username: data.usernameOrEmail.trim(),
+        password: data.password,
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Login successful");
+            router.push("/");
+          },
+          onError: (error) => {
+            toast.error(error.error.message);
+          },
+        },
+      });
     }
+  });
+};
+
+    
     return(
         <section className="text-white flex items-center justify-center h-screen">
             <div className="bg-neutral-900 border-2 border-neutral-950/50 p-8 mx-2 rounded-lg shadow-xl w-2xl h-fit flex flex-col sm:gap-4 gap-2">
@@ -45,11 +66,11 @@ export default function Login() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:gap-3 gap-2">
                     <Controller
                     control={form.control}
-                    name="email" 
+                    name="usernameOrEmail" 
                     render={({field, fieldState}) => (
                     <div className="flex flex-col sm:gap-2 gap-0.5">
-                        <label htmlFor="email">Email</label>
-                        <input placeholder="Example@gmail.com" autoComplete='true' {...field} type="text" name="email" id="email" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
+                        <label htmlFor="usernameOrEmail">Username or Email</label>
+                        <input placeholder="Username or Email" autoComplete='true' {...field} type="text" name="usernameOrEmail" id="usernameOrEmail" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
                         {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
                     </div>
                     )}

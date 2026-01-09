@@ -16,6 +16,7 @@ export default function Signup() {
             name: "",
             email: "",
             password: "",
+            username: "",
         }
     })
     const onSubmit = (data: z.infer<typeof signupSchema>) => {
@@ -24,6 +25,7 @@ export default function Signup() {
             email: data.email,
             password: data.password,
             name: data.name,
+            username: data.username,
             fetchOptions:{
                 onSuccess:()=>{
                     toast.success("Signup successful")
@@ -44,28 +46,39 @@ export default function Signup() {
                     <h3 className="text-neutral-400">Sign up to create an account</h3>  
                 </div>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:gap-3 gap-2">
-                    <Controller
-                    control={form.control}
-                    name="name" 
-                    render={({field, fieldState}) => (
-                    <div className="flex flex-col sm:gap-2 gap-0.5">
-                        <label htmlFor="name">Name</label>
-                        <input placeholder="Mohamad" autoComplete='true' {...field} type="text" id="name" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
-                        {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
-                    </div>
-                    )}
-                    />
-                    <Controller
-                    control={form.control}
-                    name="email" 
-                    render={({field, fieldState}) => (
-                    <div className="flex flex-col sm:gap-2 gap-0.5">
-                        <label htmlFor="email">Email</label>
-                        <input placeholder="Example@gmail.com" autoComplete='true' {...field} type="text" id="email" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
-                        {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
-                    </div>
-                    )}
-                    />
+                        <Controller
+                        control={form.control}
+                        name="name" 
+                        render={({field, fieldState}) => (
+                        <div className="flex flex-col sm:gap-2 gap-0.5">
+                            <label htmlFor="name">Name</label>
+                            <input placeholder="Mohamad" autoComplete='true' {...field} type="text" id="name" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
+                            {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
+                        </div>
+                        )}
+                        />
+                        <Controller
+                        control={form.control}
+                        name="username" 
+                        render={({field, fieldState}) => (
+                        <div className="flex flex-col sm:gap-2 gap-0.5">
+                            <label htmlFor="username">Username</label>
+                            <input placeholder="MohamadAh" autoComplete='true' {...field} type="text" id="username" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
+                            {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
+                        </div>
+                        )}
+                        />
+                        <Controller
+                        control={form.control}
+                        name="email" 
+                        render={({field, fieldState}) => (
+                        <div className="flex flex-col sm:gap-2 gap-0.5">
+                            <label htmlFor="email">Email</label>
+                            <input placeholder="Example@gmail.com" autoComplete='true' {...field} type="text" id="email" className={`h-12 p-2 border ${fieldState.error ? "border-accent" : "border-neutral-600"} bg-neutral-900 transition-all duration-200 rounded`} />
+                            {fieldState.error && <p className="text-accent/80 text-sm">{fieldState.error.message}</p>}
+                        </div>
+                        )}
+                        />
                     <Controller
                     control={form.control}
                     name="password" 

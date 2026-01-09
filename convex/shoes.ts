@@ -6,7 +6,7 @@ export const createShoe = mutation({
   args: { name: v.string(),description: v.string(),price: v.number(),colors: v.array(v.string()),gender: v.string(),picId: v.id('_storage')},
   handler: async (ctx, args) => {
     const user = await authComponent.safeGetAuthUser(ctx)
-    if(user?.name !== 'admin'){
+    if(user?.username !== 'admin'){
       throw new ConvexError("You must be admin to add a new shoe")
     }
    const newShoe = await ctx.db.insert("shoes",{
@@ -25,7 +25,7 @@ export const getShoes = query({
   handler: async (ctx) => {
     const shoes = await ctx.db.query("shoes").order('desc').collect()
     return await Promise.all(shoes.map(async (shoe) => {
-          const reslovedImageUrl = shoe.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null
+          const reslovedImageUrl = shoe.picId ? await ctx.storage.getUrl(shoe.picId) : null
           return {
             ...shoe,
           imageUrl: reslovedImageUrl
@@ -37,7 +37,7 @@ export const generateImageUploadUrl = mutation({
   args:{},
   handler: async (ctx) => {
     const user = await authComponent.safeGetAuthUser(ctx)
-    if(user?.name !== 'admin'){
+    if(user?.username !== 'admin'){
       throw new ConvexError("You must be admin to add a new shoe")
     }
     return await ctx.storage.generateUploadUrl()
@@ -52,7 +52,7 @@ export const getShoeById = query({
     if(!shoe){
       return null
     }
-    const resolvedImageUrl = shoe?.picId !== undefined ? await ctx.storage.getUrl(shoe.picId) : null;
+    const resolvedImageUrl = shoe.picId ? await ctx.storage.getUrl(shoe.picId) : null;
     return {
       ...shoe,
       imageUrl: resolvedImageUrl
@@ -71,7 +71,7 @@ export const searchShoes = query({
     const result: Array<searchShoesResult> = []
     const pushDocs = async (docs: Array<Doc<'shoes'>>) => {
       for(const doc of docs){
-        const resolvedImageUrl = doc?.picId !== undefined ? await ctx.storage.getUrl(doc.picId) : null;
+        const resolvedImageUrl = doc.picId ? await ctx.storage.getUrl(doc.picId) : null;
         result.push({
           _id: doc._id,
           name: doc.name,

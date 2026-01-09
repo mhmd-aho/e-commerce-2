@@ -74,10 +74,9 @@ export function Searchbar() {
         () => {
           setSearchOpen(!searchOpen)
         }
-      } className=" h-full">
+      } className="relative size-5 ">
       <Image
-           width={20}
-           height={20}
+           fill
            src={searchW}
            alt="Search Icon"
            className="h-full w-auto"
