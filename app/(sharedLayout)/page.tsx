@@ -12,7 +12,7 @@ export default function Home() {
           <div style={{ backgroundImage: 'url(/assets/img/background.webp)' }} className="sm:h-[calc(100vh-3rem)] sm:mt-12 h-screen mt-10 flex flex-col justify-center items-center text-white sm:gap-6 gap-2 bg-fit bg-center bg-no-repeat">
             <h1 className="text-center">Experience Nike Like <br /> Never Before</h1>
             <div className="flex gap-2">
-              <Link href="/product/j979def4pnvcx135prt6zw85ys7y4tta" className='font-inter font-medium shadow-lg bg-accent text-white py-2 px-4 rounded-lg hover:scale-105 transition-all duration-300 active:scale-90' >Buy Now</Link>
+              <Link href="/product/j57d92x032d5vy6kxt6d74wn917z1d6y" className='font-inter font-medium shadow-lg bg-accent text-white py-2 px-4 rounded-lg hover:scale-105 transition-all duration-300 active:scale-90' >Buy Now</Link>
               <Link href="/shop" className='font-inter font-medium shadow-lg bg-accent text-white py-2 px-5 rounded-lg hover:scale-105 transition-all duration-300 active:scale-90'>Explore</Link>
             </div>
         </div>

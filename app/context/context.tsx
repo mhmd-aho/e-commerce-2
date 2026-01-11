@@ -31,23 +31,27 @@ export const Context = createContext<ContextType | undefined>(undefined);
 export function ContextProvider({ children }: { children: React.ReactNode }) {
   const [isMobile,setIsMobile] = useState(false);
   const [navOpen,setNavOpen] = useState(false)
-  const [filterOpen, setFilterOpen] = useState(true);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false)
   const [favOpen, setFavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [shoe, setShoe] = useState("");
   const [filters,setFilters] = useState<FilterType[]>([])
-
+  const LG = 1024
   useEffect(()=>{
-    const checkIsMobile = () =>{
-      setIsMobile(window.innerWidth < 1024)
-      setFilterOpen(window.innerWidth < 1024 ? false : true)
+    const mq = window.matchMedia(`(min-width: ${LG}px)`)
+    const apply = (matches: boolean) => {
+      setIsMobile(!matches)
+      setFilterOpen(matches? true : false)
     }
-    checkIsMobile()
-    window.addEventListener('resize',checkIsMobile)
+    apply(mq.matches)
+    const  handler = (e: MediaQueryListEvent) => {
+      apply(e.matches)
+    }
+    mq.addEventListener("change",handler)
     return () => {
-      window.removeEventListener('resize',checkIsMobile)
+      mq.removeEventListener("change",handler)
     }
   },[])
   return (
