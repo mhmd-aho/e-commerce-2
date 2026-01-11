@@ -17,9 +17,13 @@ export default defineSchema({
         shoeId:v.id('shoes'),
         quantity:v.number(),
         size:v.number(),
+    }).index('user_cart', {
+        fields: ['userId'],
     }),
     favorite: defineTable({
         userId:v.string(),
         shoeId:v.id('shoes'),
+    }).index('user_favorite', {
+        fields: ['userId'],
     })
 })

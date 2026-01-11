@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Modern E-commerce Shoe Store
+
+A high-performance, real-time e-commerce application built with Next.js 16, Convex, and Tailwind CSS. This project features a seamless shopping experience for browsing, filtering, and purchasing footwear.
+
+## Features
+
+- **User Authentication**: Secure login and signup flows using Better Auth.
+- **Product Catalog**: Dynamic shoe display with advanced filtering (size, color, price) and sorting.
+- **Cart System**: Real-time shopping cart with instant updates, item management, and checkout simulation.
+- **Favorites**: Wishlist functionality for saving items.
+- **Admin Dashboard**: Restricted access for managing product inventory (adding new shoes).
+- **Responsive Design**: Fully optimized for mobile, tablet, and desktop devices.
+- **Smooth Animations**: Fluid user interactions powered by Framer Motion.
+- **Image Storage**: Integrated image handling via Convex Storage.
+
+## Technology Stack
+
+- **Frontend**: [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/)
+- **Backend & Database**: [Convex](https://convex.dev/) (Real-time database, Server Functions)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Authentication**: [Better Auth](https://www.better-auth.com/)
+- **Animations**: [Motion](https://motion.dev/) (Framer Motion)
+- **Validation**: [Zod](https://zod.dev/) & [React Hook Form](https://react-hook-form.com/)
 
 ## Getting Started
 
-First, run the development server:
+Follow these steps to set up the project locally.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (LTS version recommended)
+- npm, pnpm, or bun
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Project Structure
 
-## Learn More
+- `/app`: Next.js App Router pages and layouts.
+- `/components`: Reusable UI components (Cart, Cards, Navbar, etc.).
+- `/convex`: Backend logic (schema, API functions, auth).
+- `/lib`: Utility functions and constants.
+- `/public`: Static assets.
 
-To learn more about Next.js, take a look at the following resources:
+### Live Demo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Live Demo](https://e-commerce-2-ruby.vercel.app/)

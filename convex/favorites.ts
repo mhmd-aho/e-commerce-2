@@ -7,7 +7,7 @@ export const getFavoriteItems = query({
         if (!user) {
             return [];
         }
-        const favoriteItems = await ctx.db.query('favorite').filter(q => q.eq(q.field('userId'), user._id)).order('desc').collect()
+        const favoriteItems = await ctx.db.query('favorite').withIndex('user_favorite', (q) => q.eq('userId', user._id)).collect()
         
         const item = await Promise.all(favoriteItems.map(async (item) => {
             const shoe = await ctx.db.get(item.shoeId)
@@ -37,7 +37,7 @@ export const addToFavorite = mutation({
         if(!user){
             throw new ConvexError("You must be logged in to add a new shoe")
         }
-        const favoriteItem = await ctx.db.query('favorite').filter(q => q.and(q.eq(q.field('userId'), user._id), q.eq(q.field('shoeId'), args.shoeId))).first()
+        const favoriteItem = await ctx.db.query('favorite').withIndex('user_favorite', (q) => q.eq('userId', user._id)).filter(q => q.eq(q.field('shoeId'), args.shoeId)).first()
         if(favoriteItem){
             await ctx.db.delete(favoriteItem._id)
             return { status: 'removed', id: favoriteItem._id }

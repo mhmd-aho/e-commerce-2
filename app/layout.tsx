@@ -36,6 +36,10 @@ export const metadata: Metadata = {
   title: "Nike e-commerce",
   description: "Nike e-commerce clone for educational purposes",
   authors: [{ name: "Mohamad abou hamoud" }],
+  icons:{
+    icon:'/assets/icons/favicon.svg',
+    shortcut:'/assets/icons/favicon.svg'
+  }
   
 };
 

@@ -9,6 +9,7 @@ import { useMutation } from "convex/react"
 import { motion, AnimatePresence } from 'motion/react'
 import { useContexts } from "@/app/context/useContext"
 import { PopupVariants,buttonVariants } from "@/lib/constants"
+import { toast } from "react-toastify"
 
 
 export function Cart(){
@@ -18,6 +19,7 @@ export function Cart(){
     const cartItems = useQuery(api.cart.getCartItems)
     const increaseCart = useMutation(api.cart.increaseCart)
     const decreaseCart = useMutation(api.cart.decreaseCart)
+    const checkout = useMutation(api.cart.checkout)
     if(user){
         return(
             <>
@@ -104,9 +106,16 @@ export function Cart(){
                                     <h2 className="text-neutral-600 font-inter m-auto">No items in cart</h2>
                                 }
                                 </div>
-                                <div className="flex flex-col items-start justify-center gap-4 p-3 w-full border-t border-neutral-300">
+                                <div className={`flex flex-col items-start justify-center gap-4 p-3 w-full border-t border-neutral-300 ${isPending && 'opacity-50'}`}>
                                     <h4 className="text-black text-3xl font-extrabold">{ cartItems ? cartItems.reduce((total, item) => total + (item?.shoeWithImage?.price || 0) * (item?.quantity || 1), 0) : 0}$</h4>
-                                    <motion.button variants={buttonVariants} whileTap="whileTap" whileHover="whileHover" className='font-inter font-medium w-full shadow-lg bg-accent text-white py-2 px-4 rounded-lg'>Checkout</motion.button>
+                                    <motion.button variants={buttonVariants} whileTap="whileTap" whileHover="whileHover" className='font-inter font-medium w-full shadow-lg bg-accent text-white py-2 px-4 rounded-lg' onClick={async (e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        startTransition(async () => {
+                                           await checkout()
+                                           toast.success('Thank you for your purchase')
+                                        })
+                                    }} disabled={isPending} >Checkout</motion.button>
                                 </div>
                             </motion.div>
                             
@@ -115,5 +124,5 @@ export function Cart(){
                 </AnimatePresence>
         </>
     )
-}
+    }
 }

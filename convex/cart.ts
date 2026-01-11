@@ -7,7 +7,7 @@ export const getCartItems = query({
         if (!user) {
             return [];
         }
-        const cartItems = await ctx.db.query('cart').filter(q => q.eq(q.field('userId'), user._id)).order('desc').collect()
+        const cartItems = await ctx.db.query('cart').withIndex('user_cart', (q) => q.eq('userId', user._id)).collect()
         
         const item = await Promise.all(cartItems.map(async (item) => {
             const shoe = await ctx.db.get(item.shoeId)
@@ -68,7 +68,7 @@ export const decreaseCart = mutation({
             throw new ConvexError("Cart item not found")
         }
         if(cartItem.quantity === 1){
-            await ctx.db.delete(args.cartItemId)
+            await ctx.db.delete("cart", args.cartItemId)
             return
         }
         await ctx.db.patch(args.cartItemId, {
@@ -94,3 +94,18 @@ export const increaseCart = mutation({
         })
     }
 })
+export const checkout = mutation({
+    handler: async (ctx) => {
+        const user = await authComponent.safeGetAuthUser(ctx)
+        if(!user){
+            throw new ConvexError("You must be logged in to checkout")
+        }
+        const cartItems = await ctx.db.query('cart').withIndex('user_cart', (q) => q.eq('userId', user._id)).collect();
+        if(cartItems.length === 0){
+            throw new ConvexError("Your cart is empty")
+        }
+        await Promise.all(cartItems.map(item => ctx.db.delete('cart', item._id)))
+    }
+})
+
+
