@@ -43,13 +43,13 @@ export function ShoesGrid({shoes,status,loadMore}: {shoes: Shoe[],status: string
     },[displayedShoes.length,status,loadMore])
     if(displayedShoes.length === 0){
         return (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:gap-4 gap-2 pb-4 overflow-x-hidden w-full">
-                <h1 className="col-span-2 sm:col-span-3 text-center">No shoes found</h1>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 pb-4 overflow-x-hidden w-full">
+                <h1 className="col-span-2 lg:col-span-3 text-center">No shoes found</h1>
             </div>
         )
     }
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:gap-4 gap-2 pb-4 overflow-x-hidden w-full">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 pb-4 overflow-x-hidden w-full">
         {
             displayedShoes.map((shoe) => (
                     <Card key={shoe._id} shoe={shoe} />
@@ -58,7 +58,7 @@ export function ShoesGrid({shoes,status,loadMore}: {shoes: Shoe[],status: string
         }
         {
             status === 'CanLoadMore' && (
-                    <button className='col-span-3 row-span-1 font-inter font-medium p-4 text-neutral-400 hover:text-white transition-all duration-200' onClick={()=>loadMore(10)}>Load More</button>
+                    <button className='col-span-2 lg:col-span-3 row-span-1 font-inter font-medium p-4 text-neutral-400 hover:text-white transition-all duration-200' onClick={()=>loadMore(10)}>Load More</button>
             )
         }
        </div>

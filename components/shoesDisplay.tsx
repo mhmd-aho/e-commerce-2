@@ -9,7 +9,7 @@ export default function ShoesDisplay() {
     const {results,status,loadMore} = usePaginatedQuery(api.shoes.getShoes,{},{initialNumItems:10})
     if(status === 'LoadingFirstPage'){
         return(
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:gap-4 gap-2 pb-4 overflow-x-hidden w-full">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 pb-4 overflow-x-hidden w-full">
                 {
                     Array.from({length:6}).map((_, index) => (
                         <ShoesSkeleton key={index}/>
