@@ -1,20 +1,14 @@
-
-import { fetchQuery } from "convex/nextjs"
+'use client'
 import { api } from "@/convex/_generated/api"
-import { Suspense } from "react"
 import { ShoesSkeleton } from "./ShoesSkeleton"
-import { cacheLife, cacheTag } from "next/cache"
 import { ShoesGrid } from "./shoesGrid"
 import { Shoe } from "@/lib/constants"
+import { usePaginatedQuery } from "convex/react";
 
-
-export default async function ShoesDisplay() {
-    'use cache'
-    cacheLife('hours')
-    cacheTag('shoes')
-    const shoes = await fetchQuery(api.shoes.getShoes)
-    return (
-        <Suspense fallback={
+export default function ShoesDisplay() {
+    const {results,status,loadMore} = usePaginatedQuery(api.shoes.getShoes,{},{initialNumItems:10})
+    if(status === 'LoadingFirstPage'){
+        return(
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:gap-4 gap-2 pb-4 overflow-x-hidden w-full">
                 {
                     Array.from({length:6}).map((_, index) => (
@@ -22,8 +16,9 @@ export default async function ShoesDisplay() {
                     ))
                 }
             </div>
-        }>
-            <ShoesGrid shoes={shoes as Shoe[]}/>
-        </Suspense>
+        )
+    }
+    return(
+        <ShoesGrid shoes={results as Shoe[]} status={status} loadMore={loadMore}/>
     )
 }

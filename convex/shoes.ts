@@ -2,6 +2,7 @@ import { mutation, query } from "./_generated/server";
 import { v,ConvexError } from "convex/values";
 import { authComponent } from "./auth";
 import { Doc } from "./_generated/dataModel";
+import { paginationOptsValidator } from "convex/server";
 export const createShoe = mutation({
   args: { name: v.string(),description: v.string(),price: v.number(),colors: v.array(v.string()),gender: v.string(),picId: v.id('_storage')},
   handler: async (ctx, args) => {
@@ -22,15 +23,19 @@ export const createShoe = mutation({
   },
 });
 export const getShoes = query({
-  handler: async (ctx) => {
-    const shoes = await ctx.db.query("shoes").order('desc').collect()
-    return await Promise.all(shoes.map(async (shoe) => {
-          const reslovedImageUrl = shoe.picId ? await ctx.storage.getUrl(shoe.picId) : null
-          return {
-            ...shoe,
-          imageUrl: reslovedImageUrl
-        }
-      }))
+  args:{
+    paginationOpts: paginationOptsValidator
+  },
+  handler: async (ctx, args) => {
+    const shoes = await ctx.db.query("shoes").order('desc').paginate(args.paginationOpts)
+    const pageWithUrls = await Promise.all(shoes.page.map(async (shoe) => {
+        const url = shoe.picId ? await ctx.storage.getUrl(shoe.picId) : null;
+        return { ...shoe, imageUrl: url };
+    }));
+    return{
+      ...shoes,
+      page: pageWithUrls
+    }
   },
 })
 export const generateImageUploadUrl = mutation({

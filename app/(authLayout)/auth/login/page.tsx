@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 import { useForm,Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +8,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import {toast} from "react-toastify"
+import Link from "next/link";
 
 export default function Login() {
     const [isPending, startTransition] = useTransition();
@@ -87,6 +89,7 @@ const onSubmit = (data: z.infer<typeof loginSchema>) => {
                     )}
                     />
                     <button disabled={isPending} type="submit" className="bg-white/80 hover:bg-white/60 transition-all duration-200 text-black h-12 rounded-lg sm:mt-4 mt-2">{isPending ? "Loading..." : "Login"}</button>
+                    <Link href="/auth/signup" className="text-neutral-400 hover:text-white transition-all duration-200">Don't have an account? Register</Link>
                 </form>
             </div> 
         </section>

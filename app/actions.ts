@@ -5,7 +5,6 @@ import { fetchMutation } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import { redirect } from "next/navigation";
 import { getToken } from "@/lib/auth-server";
-import { updateTag } from "next/cache";
 type FormValues = z.infer<typeof shoeSchema>;
 export async function createShoeAction(data: FormValues) {
     try{
@@ -31,7 +30,6 @@ export async function createShoeAction(data: FormValues) {
               gender: validatedData.data.gender,
               picId: storageId,
             }, {token});
-            updateTag('shoes')
             redirect('/shop')
         } catch{
             return{

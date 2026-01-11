@@ -38,7 +38,7 @@ export default function AddShoe() {
     }
     const user = useQuery(api.auth.getCurrentUser)
     
-    if(user?.name !== 'admin') return redirect('/auth/login')
+    if(user?.username !== 'admin') return redirect('/auth/login')
 
     return (<section className="text-white flex items-center justify-center lg:h-screen overflow-x-hidden">
             <div className="bg-neutral-900 border-2 border-neutral-950/50 p-8 mx-2 max-sm:mt-10 rounded-lg shadow-xl w-2xl h-fit flex flex-col sm:gap-4 gap-2">

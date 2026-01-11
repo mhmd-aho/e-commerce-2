@@ -1,10 +1,8 @@
 import {Doc} from "@/convex/_generated/dataModel";
 export type Shoe = Doc<'shoes'> & { imageUrl: string | null | undefined }
-export interface CartItem extends Shoe {
-  quantity: number
-  size: number
-  name: string
-  price: number
+export type CartItem = Pick<Shoe, '_id' | 'name' | 'price' | 'imageUrl'> & {
+    quantity: number,
+    size: number
 }
 
 

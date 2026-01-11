@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Link from "next/link";
 export default function Signup() {
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
@@ -91,6 +92,7 @@ export default function Signup() {
                     )}
                     />
                     <button disabled={isPending} type="submit" className="bg-white/80 hover:bg-white/60 transition-all duration-200 text-black h-12 rounded-lg sm:mt-4 mt-2">{isPending ? "Loading..." : "Signup"}</button>
+                    <Link href="/auth/login" className="text-neutral-400 hover:text-white transition-all duration-200">Already have an account? Login</Link>
                 </form>
             </div>
         </section>

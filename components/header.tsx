@@ -6,16 +6,22 @@ import {Navbar} from "./navbar";
 import { Profile } from "./user";
 import {Favorites} from "./favorites";
 import { Cart } from "./cart";
-import { ContextProvider } from "@/app/context/context";
-
+import { Suspense } from "react";
 export function Header() {
     return (
-        <ContextProvider>
             <header className="fixed top-0 left-0 w-full bg-black flex items-center justify-between p-2 sm:h-12 h-10 z-50">
                 <Link href="/" className="w-1/5 h-full py-1">
                     <Image  src={logo} className="h-full w-auto" alt="Nike Logo" />
                 </Link>
-               <Navbar/>
+                <Suspense fallback={
+                    <div className="flex space-x-6 h-full">
+                        <div className="w-20 h-full rounded-full bg-neutral-400 animate-pulse"/>
+                        <div className="w-20 h-full rounded-full bg-neutral-400 animate-pulse"/>
+                        <div className="w-20 h-full rounded-full bg-neutral-400 animate-pulse"/>
+                    </div>
+                }>
+                    <Navbar/>
+                </Suspense>
                 <div className="flex items-center sm:gap-4 gap-2 h-full">
                     <Searchbar/>
                     <div className="flex items-center gap-2 h-full">
@@ -25,6 +31,5 @@ export function Header() {
                     </div>
                 </div>
             </header>
-        </ContextProvider>
     )
 }

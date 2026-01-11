@@ -38,6 +38,18 @@ export function ContextProvider({ children }: { children: React.ReactNode }) {
   const [userOpen, setUserOpen] = useState(false);
   const [shoe, setShoe] = useState("");
   const [filters,setFilters] = useState<FilterType[]>([])
+
+  useEffect(()=>{
+    const checkIsMobile = () =>{
+      setIsMobile(window.innerWidth < 1024)
+      setFilterOpen(window.innerWidth < 1024 ? false : true)
+    }
+    checkIsMobile()
+    window.addEventListener('resize',checkIsMobile)
+    return () => {
+      window.removeEventListener('resize',checkIsMobile)
+    }
+  },[])
   return (
     <Context.Provider value={{ filterOpen, setFilterOpen, cartOpen, setCartOpen, favOpen, setFavOpen, userOpen, setUserOpen, shoe, setShoe,filters,setFilters,isMobile,setIsMobile,searchOpen,setSearchOpen,navOpen,setNavOpen }}>
       {children}

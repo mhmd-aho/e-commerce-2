@@ -2,9 +2,10 @@
 import { useContexts } from "@/app/context/useContext"
 import { Shoe } from "@/lib/constants"
 import {Card} from "@/components/card"
-export function ShoesGrid({shoes}: {shoes: Shoe[]}) {
+import { useEffect } from "react"
+export function ShoesGrid({shoes,status,loadMore}: {shoes: Shoe[],status: string,loadMore: (numItems: number) => void}) {
     const {filters} = useContexts()
-    let displayedShoes = shoes
+    let displayedShoes = [...shoes]
     if(filters.length > 0){
         filters.forEach((filter) => {
             if(typeof filter.value === 'object'){
@@ -24,10 +25,9 @@ export function ShoesGrid({shoes}: {shoes: Shoe[]}) {
             if(filter.type === 'gender'){
                 if(filter.value === 'men'){
                     displayedShoes = displayedShoes.filter((shoe) => shoe.gender === 'men' || shoe.gender === 'both')
-                }
-                if(filter.value === 'women'){
+                } else if(filter.value === 'women'){
                     displayedShoes = displayedShoes.filter((shoe) => shoe.gender === 'women' || shoe.gender === 'both')
-                }else{
+                } else{
                     displayedShoes = displayedShoes.filter((shoe) => shoe.gender === filter.value)
                 }
             }
@@ -36,6 +36,11 @@ export function ShoesGrid({shoes}: {shoes: Shoe[]}) {
             }
         })
     }
+    useEffect(()=>{
+        if(displayedShoes.length === 0 && status === 'CanLoadMore'){
+            loadMore(10)
+        }
+    },[displayedShoes.length,status,loadMore])
     if(displayedShoes.length === 0){
         return (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:gap-4 gap-2 pb-4 overflow-x-hidden w-full">
@@ -50,6 +55,11 @@ export function ShoesGrid({shoes}: {shoes: Shoe[]}) {
                     <Card key={shoe._id} shoe={shoe} />
         
         ))
+        }
+        {
+            status === 'CanLoadMore' && (
+                    <button className='col-span-3 row-span-1 font-inter font-medium p-4 text-neutral-400 hover:text-white transition-all duration-200' onClick={()=>loadMore(10)}>Load More</button>
+            )
         }
        </div>
     )

@@ -1,7 +1,7 @@
 import Filters from "@/components/filters";
 import ShoesDisplay from "@/components/shoesDisplay";
 import { Metadata } from "next";
-import { ContextProvider } from "@/app/context/context";
+
 import {FilterButton} from "@/components/filterButton";
 export const metadata: Metadata = {
     title: 'Shop | Nike e-commerce',
@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 
 export default function Shop() {
     return (
-        <ContextProvider>
             <section 
                 className="h-screen bg-black overflow-hidden"
             >
@@ -27,6 +26,5 @@ export default function Shop() {
                 </div>
             </div>
         </section>
-        </ContextProvider>
     )
 }

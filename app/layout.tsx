@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Poppins, Inter, Orbitron } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { Bounce, ToastContainer } from "react-toastify";
+import { ContextProvider } from "@/app/context/context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +19,7 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
+  
 });
 
 const inter = Inter({
@@ -47,7 +49,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${inter.variable} ${orbitron.variable} antialiased `}
       >
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider>
+          <ContextProvider>
+            {children}
+          </ContextProvider>
+        </ConvexClientProvider>
         <ToastContainer position="bottom-right"  
         theme="colored" transition={Bounce} closeOnClick pauseOnFocusLoss draggable pauseOnHover/>
       </body>
