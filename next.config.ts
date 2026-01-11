@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "careful-avocet-513.convex.cloud",
+        hostname: "enchanted-frog-549.convex.cloud",
         port: "",
       },
     ],
